@@ -1,8 +1,8 @@
 package app
 
 import (
-	"errors"
 	"fmt"
+	"github.com/artelhin/GoDefense/utils"
 	"github.com/hajimehoshi/ebiten"
 	"log"
 )
@@ -21,12 +21,11 @@ const (
 
 var (
 	app *App
-	ErrNormalQuit = errors.New(NormalQuit)
 )
 
 func (app *App) Update(screen *ebiten.Image) error {
 	if app.ShouldQuit {
-		return ErrNormalQuit
+		return utils.ErrNormalQuit
 	}
 	if err := app.State.Tick(); err != nil {
 		return err
@@ -47,7 +46,7 @@ func (app *App) Run() {
 		int(float64(app.GraphOptions.ResolutionH)*app.GraphOptions.ScaleFactor), 1/app.GraphOptions.ScaleFactor,
 		fmt.Sprintf("GoDefense %s", app.Version))
 	if err != nil {
-		if err != ErrNormalQuit {
+		if err != utils.ErrNormalQuit {
 			log.Println("Error occurred: ", err)
 		}
 	}

@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/artelhin/GoDefense/input"
+	"github.com/artelhin/GoDefense/utils"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"image/color"
@@ -16,7 +17,7 @@ type Menu struct {
 func (menu *Menu) Tick() error {
 	if ebiten.IsKeyPressed(ebiten.KeyEscape) {
 		Application().ShouldQuit = true
-		return ErrNormalQuit
+		return utils.ErrNormalQuit
 	}
 	keys := menu.Input.GetInput()
 	for _, key := range keys {
@@ -27,7 +28,7 @@ func (menu *Menu) Tick() error {
 			switch key.Key {
 			case ebiten.KeyEscape:
 				Application().ShouldQuit = true
-				return ErrNormalQuit
+				return utils.ErrNormalQuit
 			case ebiten.KeyEnter:
 			Application().State = NewGameState()
 			case ebiten.KeySpace:

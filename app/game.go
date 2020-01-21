@@ -2,6 +2,7 @@ package app
 
 import (
 	"github.com/artelhin/GoDefense/input"
+	"github.com/artelhin/GoDefense/utils"
 	"github.com/hajimehoshi/ebiten"
 	"image/color"
 )
@@ -21,7 +22,7 @@ func (game *Game) Tick() error {
 		switch key.Key {
 		case ebiten.KeyEscape:
 			Application().ShouldQuit = true
-			return ErrNormalQuit
+			return utils.ErrNormalQuit
 		case ebiten.KeySpace:
 			game.Red = true
 		}
