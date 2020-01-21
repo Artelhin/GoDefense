@@ -5,16 +5,18 @@ import (
 	"github.com/artelhin/GoDefense/utils"
 	"github.com/hajimehoshi/ebiten"
 	"image/color"
+	"time"
 )
 
 type Game struct {
 	Input input.InputSolver
 
-	Path *Path
-	Units []Enemy
-	Towers []Tower
+	Path   *Path
+	Units  []*Enemy
+	Towers []*Tower
 
-	Red bool
+	LastTick time.Time
+	Red      bool
 }
 
 func (game *Game) Tick() error {
@@ -31,23 +33,51 @@ func (game *Game) Tick() error {
 			game.Red = true
 		}
 	}
+
+	delta := time.Since(game.LastTick)
+	game.LastTick = time.Now()
+	for _, e := range game.Units {
+		e.Move(delta)
+	}
 	return nil
 }
 
+var EnemyImage = func() *ebiten.Image {
+	image, _ := ebiten.NewImage(10, 10, ebiten.FilterNearest)
+	image.Fill(color.RGBA{0x00,0xff,0x00,0xff})
+	return image
+}()
+
 func (game *Game) Render(screen *ebiten.Image) {
-	if game.Red {
-		screen.Fill(color.RGBA{0,0,0xff,0xff})
-		game.Red = false
-	} else {
-		screen.Fill(color.RGBA{0, 0xff, 0, 0xff})
+	for _, e := range game.Units {
+		opts := &ebiten.DrawImageOptions{}
+		opts.GeoM.Translate(e.X,e.Y)
+		screen.DrawImage(EnemyImage, opts)
 	}
 }
 
 func NewGameState() *Game {
-	return &Game{
-		Input:input.NewInputSolver([]ebiten.Key{
+	game := &Game{
+		Input: input.NewInputSolver([]ebiten.Key{
 			ebiten.KeyEscape,
 			ebiten.KeySpace,
 		}, nil),
+		Path: &Path{
+			Points: []PathPoint{
+				{1, 1},
+				{140, 1},
+				{140, 140},
+			},
+			Length: 260,
+		},
 	}
+	game.Units = []*Enemy{
+		{
+			game.Path,
+			0, 0, 10, 30, 0,
+		},
+	}
+	game.Towers = make([]*Tower, 0)
+	game.LastTick = time.Now()
+	return game
 }

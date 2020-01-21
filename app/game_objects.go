@@ -1,6 +1,7 @@
 package app
 
 import (
+	"log"
 	"math"
 	"time"
 )
@@ -44,6 +45,7 @@ func (p *Path) Follow(distance float64) (float64, float64) {
 		}
 		distance -= dist
 	}
+	log.Println("returning 0 0")
 	return 0, 0
 }
 
