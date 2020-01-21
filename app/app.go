@@ -15,10 +15,6 @@ type App struct {
 	ShouldQuit bool
 }
 
-const (
-	NormalQuit = "quited"
-)
-
 var (
 	app *App
 )
