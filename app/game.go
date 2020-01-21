@@ -10,6 +10,10 @@ import (
 type Game struct {
 	Input input.InputSolver
 
+	Path *Path
+	Units []Enemy
+	Towers []Tower
+
 	Red bool
 }
 
