@@ -54,6 +54,7 @@ func (app *App) Run() {
 
 func NewApp() *App {
 	app = new(App)
+	app.Version = "develop-build"
 	app.GraphOptions = DefaultGraphOptions()
 	app.ShouldQuit = false
 	app.State = NewMenuState()
