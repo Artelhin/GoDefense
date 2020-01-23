@@ -13,6 +13,10 @@ type Tower struct {
 	Name        string
 }
 
+func (*Tower) Transparent() bool {
+	return false
+}
+
 type PathPoint struct {
 	X, Y float64
 }
@@ -47,6 +51,10 @@ func (p *Path) Follow(distance float64) (float64, float64) {
 	}
 	log.Println("returning 0 0")
 	return 0, 0
+}
+
+func FormPath(points []MazePoint) *Path {
+	//todo
 }
 
 type Enemy struct {
