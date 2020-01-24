@@ -27,9 +27,9 @@ var (
 //Returns error if maze has no solution
 func (maze *Maze) SolveMaze() ([]MazePoint, error) {
 	path := make([]MazePoint, 0)
-	for i := 0; i < len(maze.MazePoints) - 1; i++ {
+	for i := 0; i < len(maze.MazePoints)-1; i++ {
 		var (
-			visited = make([][]bool, maze.Rows)
+			visited  = make([][]bool, maze.Rows)
 			ancestor = make([][]MazePoint, maze.Rows)
 		)
 		for j := range visited {
@@ -52,7 +52,7 @@ func (maze *Maze) SolveMaze() ([]MazePoint, error) {
 func (maze *Maze) Solve(from, to MazePoint) []MazePoint {
 
 	var (
-		visited [][]bool
+		visited  [][]bool
 		ancestor [][]MazePoint
 	)
 
@@ -96,31 +96,6 @@ func (maze *Maze) Solve(from, to MazePoint) []MazePoint {
 		}
 	}
 	return nil
-
-	//if from.X == to.X && from.Y == to.Y {
-	//	return []MazePoint{from}
-	//}
-	//visited[from.X][from.Y] = true
-	//nearbyPoints := []MazePoint{
-	//	{from.X + 1, from.Y},
-	//	{from.X - 1, from.Y},
-	//	{from.X, from.Y + 1},
-	//	{from.X, from.Y - 1},
-	//}
-	//var res []MazePoint = nil
-	//for _, point := range nearbyPoints {
-	//	if point.X >= 0 && point.X < maze.Rows &&
-	//		point.Y >= 0 && point.Y < maze.Columns &&
-	//		(maze.Cell[point.X][point.Y] == nil || maze.Cell[point.X][point.Y].Transparent()) &&
-	//		!visited[point.X][point.Y] {
-	//		if path := maze.Solve(visited, point, to); path != nil {
-	//			if res == nil || len(res) == 0 || len(path)+1 < len(res) {
-	//				res = append([]MazePoint{from}, path...)
-	//			}
-	//		}
-	//	}
-	//}
-	//return res
 }
 
 //NewMaze returns default empty maze with start at left-top corner and exit at bottom-right
@@ -132,8 +107,8 @@ func NewMaze(rows, columns int) *Maze {
 		maze.Cell[i] = make([]MazeObject, columns)
 	}
 	maze.MazePoints = []MazePoint{
-		{0,0},
-		{rows-1, columns-1},
+		{0, 0},
+		{rows - 1, columns - 1},
 	}
 	return maze
 }

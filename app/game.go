@@ -5,6 +5,7 @@ import (
 	"github.com/artelhin/GoDefense/utils"
 	"github.com/hajimehoshi/ebiten"
 	"image/color"
+	"math"
 	"time"
 )
 
@@ -44,17 +45,32 @@ func (game *Game) Tick() error {
 	return nil
 }
 
-var EnemyImage = func() *ebiten.Image {
-	image, _ := ebiten.NewImage(10, 10, ebiten.FilterNearest)
-	image.Fill(color.RGBA{0x00, 0xff, 0x00, 0xff})
-	return image
-}()
+var (
+	cellsize = int(math.Min(float64(Application().GraphOptions.ResolutionW), float64(Application().GraphOptions.ResolutionH)) / 32)
+
+	EnemyImage = func() *ebiten.Image {
+		image, _ := ebiten.NewImage(30, 30, ebiten.FilterNearest)
+		image.Fill(color.RGBA{0x00, 0xff, 0x00, 0xff})
+		return image
+	}()
+	TowerImage = func() *ebiten.Image {
+		image, _ := ebiten.NewImage(30, 30, ebiten.FilterNearest)
+		image.Fill(color.RGBA{0xff, 0xff, 0xff, 0xff})
+		return image
+	}()
+)
 
 func (game *Game) Render(screen *ebiten.Image) {
+	//todo поправка на то, что 0 0 не в центре картинки
 	for _, e := range game.Units {
 		opts := &ebiten.DrawImageOptions{}
 		opts.GeoM.Translate(e.X, e.Y)
 		screen.DrawImage(EnemyImage, opts)
+	}
+	for _, t := range game.Towers {
+		opts := &ebiten.DrawImageOptions{}
+		opts.GeoM.Translate(t.Y, t.X) // Note: (x,y) from ebiten is (y,x) from maze grid
+		screen.DrawImage(TowerImage, opts)
 	}
 }
 
@@ -76,6 +92,9 @@ func NewGameState() *Game {
 	game.Towers = make([]*Tower, 0)
 	game.LastTick = time.Now()
 	game.Maze = NewMaze(32, 32)
+	tower := &Tower{X: float64(cellsize / 2 + 1*cellsize), Y: float64(cellsize/2)}
+	game.Maze.Cell[1][0] = tower
+	game.Towers = append(game.Towers, tower)
 	solution, _ := game.Maze.SolveMaze()
 	game.Path = FormPath(solution)
 	game.Units = []*Enemy{
@@ -83,7 +102,7 @@ func NewGameState() *Game {
 			game.Path,
 			game.Path.Points[0].X,
 			game.Path.Points[0].Y,
-			10, 60, 0,
+			10, 180, 0,
 		},
 	}
 	return game

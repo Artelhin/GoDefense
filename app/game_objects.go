@@ -54,16 +54,12 @@ func (p *Path) Follow(distance float64) (float64, float64) {
 }
 
 func FormPath(points []MazePoint) *Path {
-	// define sizes
-	width, height := Application().GraphOptions.ResolutionW, Application().GraphOptions.ResolutionH
-	cellsize := int(math.Min(float64(width), float64(height)) / 32)
-
 	// optimize points, left only corners and start/end
 	optimized := []MazePoint{points[0]}
 	if len(points) > 2 {
 		for i := 1; i < len(points)-1; i++ {
 			if !(points[i-1].X-points[i].X == points[i].X-points[i+1].X ||
-				points[i-1].Y-points[i].Y == points[i].Y-points[i+1].Y) { // then this is a corner and can't be removed
+				points[i-1].Y-points[i].Y == points[i].Y-points[i+1].Y) { // so this is a corner and can't be removed => add it to the path
 				optimized = append(optimized, points[i])
 			}
 		}
@@ -75,8 +71,8 @@ func FormPath(points []MazePoint) *Path {
 	path.Points = make([]PathPoint, 0)
 	for _, p := range optimized {
 		point := PathPoint{
-			X: float64(cellsize/2 + p.X*cellsize),
-			Y: float64(cellsize/2 + p.Y*cellsize),
+			X: float64(cellsize/2 + p.Y*cellsize), // Note: (x,y) from ebiten is (y,x) from maze grid
+			Y: float64(cellsize/2 + p.X*cellsize),
 		}
 		path.Points = append(path.Points, point)
 	}
