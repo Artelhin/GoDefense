@@ -15,6 +15,8 @@ type Game struct {
 	Units  []*Enemy
 	Towers []*Tower
 
+	Maze *Maze
+
 	LastTick time.Time
 	Red      bool
 }
@@ -44,14 +46,14 @@ func (game *Game) Tick() error {
 
 var EnemyImage = func() *ebiten.Image {
 	image, _ := ebiten.NewImage(10, 10, ebiten.FilterNearest)
-	image.Fill(color.RGBA{0x00,0xff,0x00,0xff})
+	image.Fill(color.RGBA{0x00, 0xff, 0x00, 0xff})
 	return image
 }()
 
 func (game *Game) Render(screen *ebiten.Image) {
 	for _, e := range game.Units {
 		opts := &ebiten.DrawImageOptions{}
-		opts.GeoM.Translate(e.X,e.Y)
+		opts.GeoM.Translate(e.X, e.Y)
 		screen.DrawImage(EnemyImage, opts)
 	}
 }
@@ -71,13 +73,18 @@ func NewGameState() *Game {
 			Length: 260,
 		},
 	}
+	game.Towers = make([]*Tower, 0)
+	game.LastTick = time.Now()
+	game.Maze = NewMaze(32, 32)
+	solution, _ := game.Maze.SolveMaze()
+	game.Path = FormPath(solution)
 	game.Units = []*Enemy{
 		{
 			game.Path,
-			0, 0, 10, 30, 0,
+			game.Path.Points[0].X,
+			game.Path.Points[0].Y,
+			10, 60, 0,
 		},
 	}
-	game.Towers = make([]*Tower, 0)
-	game.LastTick = time.Now()
 	return game
 }
