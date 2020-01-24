@@ -25,7 +25,7 @@ func (maze *Maze) SolveMaze() ([]MazePoint, error) {
 	for i := 0; i < len(maze.MazePoints) - 1; i++ {
 		var visited = make([][]bool, maze.Rows)
 		for j := range visited {
-			visited[i] = make([]bool, maze.Columns)
+			visited[j] = make([]bool, maze.Columns)
 		}
 		section := maze.Solve(visited, maze.MazePoints[i], maze.MazePoints[i+1])
 		if section == nil {

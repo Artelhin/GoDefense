@@ -31,6 +31,9 @@ func (app *App) Update(screen *ebiten.Image) error {
 }
 
 func Application() *App {
+	if app == nil {
+		app = NewApp()
+	}
 	return app
 }
 
