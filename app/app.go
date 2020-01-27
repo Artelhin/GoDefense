@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/artelhin/GoDefense/utils"
 	"github.com/hajimehoshi/ebiten"
+	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"log"
 )
 
@@ -23,10 +24,14 @@ func (app *App) Update(screen *ebiten.Image) error {
 	if app.ShouldQuit {
 		return utils.ErrNormalQuit
 	}
+	if ebiten.IsDrawingSkipped() {
+		return nil
+	}
 	if err := app.State.Tick(); err != nil {
 		return err
 	}
 	app.State.Render(screen)
+	ebitenutil.DebugPrint(screen, fmt.Sprintf("FPS: %f\nTPS: %f", ebiten.CurrentFPS(), ebiten.CurrentTPS()))
 	return nil
 }
 
@@ -39,7 +44,9 @@ func Application() *App {
 
 func (app *App) Run() {
 	ebiten.SetFullscreen(app.GraphOptions.Fullscreen)
-	ebiten.SetCursorVisible(app.GraphOptions.CustomCursor)
+	ebiten.SetWindowDecorated(!app.GraphOptions.Borderless)
+	ebiten.SetCursorVisible(!app.GraphOptions.CustomCursor)
+	ebiten.SetVsyncEnabled(app.GraphOptions.VSync)
 	err := ebiten.Run(app.Update,
 		int(float64(app.GraphOptions.ResolutionW)*app.GraphOptions.ScaleFactor),
 		int(float64(app.GraphOptions.ResolutionH)*app.GraphOptions.ScaleFactor), 1/app.GraphOptions.ScaleFactor,

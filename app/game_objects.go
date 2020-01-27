@@ -53,6 +53,8 @@ func (p *Path) Follow(distance float64) (float64, float64) {
 	return 0, 0
 }
 
+const cellSize = 100
+
 func FormPath(points []MazePoint) *Path {
 	// optimize points, left only corners and start/end
 	optimized := []MazePoint{points[0]}
@@ -71,8 +73,8 @@ func FormPath(points []MazePoint) *Path {
 	path.Points = make([]PathPoint, 0)
 	for _, p := range optimized {
 		point := PathPoint{
-			X: float64(cellsize/2 + p.Y*cellsize), // Note: (x,y) from ebiten is (y,x) from maze grid
-			Y: float64(cellsize/2 + p.X*cellsize),
+			X: float64(cellSize/2 + p.Y*cellSize), // Note: (x,y) from ebiten is (y,x) from maze grid
+			Y: float64(cellSize/2 + p.X*cellSize),
 		}
 		path.Points = append(path.Points, point)
 	}

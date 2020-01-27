@@ -5,6 +5,8 @@ import (
 	"github.com/artelhin/GoDefense/utils"
 )
 
+const MazeSize = 32
+
 type MazeObject interface {
 	Transparent() bool
 }

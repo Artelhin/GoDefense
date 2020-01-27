@@ -31,6 +31,7 @@ func (menu *Menu) Tick() error {
 				return utils.ErrNormalQuit
 			case ebiten.KeyEnter:
 			Application().State = NewGameState()
+			return nil
 			case ebiten.KeySpace:
 				menu.White = true
 			}
